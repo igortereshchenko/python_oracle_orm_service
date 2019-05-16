@@ -8,8 +8,6 @@ class UserHelper:
 
     def getSkillData(self, skill_name=None):
 
-
-
         if not skill_name:
             query = 'select * from table(user_skillS.GetSkillData())'
         else:
@@ -17,7 +15,6 @@ class UserHelper:
 
         result = self.db.execute(query)
         return result.fetchall()
-
 
 
     def getUserId(self, user_email, user_password):

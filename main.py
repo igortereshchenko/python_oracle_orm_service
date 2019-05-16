@@ -29,7 +29,7 @@ def user():
             return "Status {} ID {}".format(status,user_id)
 
 
-    return render_template('user.html', form=form, users = allUsers)
+    return render_template('user_include.html', form=form, users = allUsers)
 
 
 if __name__ == '__main__':

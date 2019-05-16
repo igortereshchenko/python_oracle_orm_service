@@ -10,65 +10,76 @@ query = """
 SELECT
     col.column_name,
     col.data_type,
-    col.data_length
+    col.nullable
 FROM
     sys.all_tab_columns col
     INNER JOIN sys.all_tables t 
     ON col.owner = t.owner AND col.table_name = t.table_name
 WHERE
-    col.owner = upper('{}')
+    col.owner = '{}'
     AND col.table_name = '{}'
 """.format(table_owner,table_name)
 
 result = db.execute(query)
-
-# for column_name, data_type, data_lenght in result.fetchall():
-#     print(column_name,data_type,data_lenght)
 
 
 controls_mapping = \
     {
         "VARCHAR2":"StringField",
         "DATE":"DateField",
-        "NUMBER":"IntegerField"
+        "NUMBER":"IntegerField",
+        "CHAR": "StringField",
     }
 
 
-class_file = """
-from flask_wtf import Form
-from wtforms import StringField,   SubmitField,  IntegerField, DateField
-from flask import Flask, render_template, request, flash
-from wtforms import validators, ValidationError
 
-class {}Form(Form):
-""".format(table_name.upper())
+class_fields = ""
+form_fields = ""
 
+for column_name, data_type, nullable in result.fetchall():
+    if nullable=='Y':
+        data_required = ""
+    else:
+        data_required = ",[validators.DataRequired('Please enter {}.')]".format(column_name.lower())
 
-form_file="""
-<form action = "/{}" method = post>
-         <fieldset>
-""".format(table_name.lower())
+    class_fields +="    {} = {}('{}: '".format(column_name.lower(), controls_mapping[data_type], column_name.lower()) +data_required+ ")\n"
 
 
-for column_name, data_type, data_lenght in result.fetchall():
-    class_file+="    {} = {}('{}: ')\n".format(column_name, controls_mapping[data_type], column_name)
 
-    form_file+="    {{ form.{}.label }} {{ form.{} }} <br/>\n".format(column_name.lower(), column_name.lower())
-
-
-class_file+="    submit = SubmitField('Submit')"
-
-form_file+="""
-        {{ form.submit }}
-        </fieldset>
-</form>         
-"""
+    form_fields += "{{ form.{}.label }} {{ form.{} }} <br/>\n".format(column_name.lower(), column_name.lower())
+    form_fields +=\
+    """
+    {% for message in form."""+column_name.lower()+""".errors %}
+        <div>{{ message }}</div>
+    {% endfor %}\n
+    """
 
 
-with open("../forms/{}AUTO.py".format(table_name), "w") as file:
-    file.write(class_file)
+
+
+
+with open("file_templates/wtf_form", "r") as file:
+    class_file = file.read()
+    class_file = class_file.replace('$FIELDS$',class_fields)
+    class_file = class_file.replace('$CLASSNAME$', table_name.lower())
+
+
+    class_file = class_file.replace('$KEY$', table_name.lower()+"_id")
+
     file.close()
 
-with open("../templates/{}formAUTO.html".format(table_name.lower()), "w") as file:
-    file.write(form_file)
+    with open("../forms/{}AUTO.py".format(table_name.lower()), "w") as file:
+         file.write(class_file)
+         file.close()
+
+
+
+
+with open("file_templates/html_form", "r") as file:
+    html_file = file.read()
+    html_file = html_file.replace('$FIELDS$',form_fields)
     file.close()
+
+    with open("../templates/{}AUTO.html".format(table_name.lower()), "w") as file:
+        file.write(html_file)
+        file.close()

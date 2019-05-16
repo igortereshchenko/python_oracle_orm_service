@@ -1,0 +1,51 @@
+
+<form action = "{{action}}/" method = post>
+ <fieldset>
+
+    { form.user_password.label } { form.user_password } <br/>
+
+    {% for message in form.user_password.errors %}
+        <div>{{ message }}</div>
+    {% endfor %}
+
+    { form.user_birthday.label } { form.user_birthday } <br/>
+
+    {% for message in form.user_birthday.errors %}
+        <div>{{ message }}</div>
+    {% endfor %}
+
+    { form.user_email.label } { form.user_email } <br/>
+
+    {% for message in form.user_email.errors %}
+        <div>{{ message }}</div>
+    {% endfor %}
+
+    { form.user_name.label } { form.user_name } <br/>
+
+    {% for message in form.user_name.errors %}
+        <div>{{ message }}</div>
+    {% endfor %}
+
+    { form.user_year.label } { form.user_year } <br/>
+
+    {% for message in form.user_year.errors %}
+        <div>{{ message }}</div>
+    {% endfor %}
+
+    { form.user_studybook.label } { form.user_studybook } <br/>
+
+    {% for message in form.user_studybook.errors %}
+        <div>{{ message }}</div>
+    {% endfor %}
+
+    { form.user_id.label } { form.user_id } <br/>
+
+    {% for message in form.user_id.errors %}
+        <div>{{ message }}</div>
+    {% endfor %}
+
+    
+    {{ form.submit }}
+
+ </fieldset>
+</form>

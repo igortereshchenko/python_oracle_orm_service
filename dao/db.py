@@ -28,9 +28,11 @@ class OracleDb(object):
 
         return cls._instance
 
+
     def __init__(self):
         self.connection = self._instance.connection
         self.cursor = self._instance.cursor
+
 
     def execute(self, query):
         try:

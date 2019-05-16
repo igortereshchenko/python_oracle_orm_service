@@ -1,0 +1,9 @@
+
+<form action = "{{action}}/" method = post>
+ <fieldset>
+
+    $FIELDS$
+    {{ form.submit }}
+
+ </fieldset>
+</form>
