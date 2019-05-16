@@ -1,6 +1,7 @@
 from dao.db import OracleDb
 import cx_Oracle
 
+
 class UserHelper:
 
     def __init__(self):
@@ -8,10 +9,12 @@ class UserHelper:
 
     def getSkillData(self, skill_name=None):
 
-        if not skill_name:
-            query = 'select * from table(user_skillS.GetSkillData())'
+        if skill_name:
+            skill_name="'{0}'".format(skill_name)
         else:
-            query = "select * from table(user_skillS.GetSkillData('{}'))".format(skill_name)
+            skill_name='null'
+
+        query = "select * from table(user_skillS.GetSkillData({0}))".format(skill_name)
 
         result = self.db.execute(query)
         return result.fetchall()

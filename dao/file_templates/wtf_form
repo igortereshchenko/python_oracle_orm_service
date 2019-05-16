@@ -13,6 +13,6 @@ $FIELDS$
 
     def delete(self):
         db = OracleDb()
-        query = "DELETE FROM $CLASSNAME$ WHERE {0} = {1}".format('$KEY$', self.$KEY$)
+        query = "DELETE FROM $CLASSNAME$ WHERE {0} = {1}".format('$KEY$', self.$KEY$.data)
 
         db.execute(query)

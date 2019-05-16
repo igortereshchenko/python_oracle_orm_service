@@ -20,6 +20,6 @@ class userForm(Form):
 
     def delete(self):
         db = OracleDb()
-        query = "DELETE FROM user WHERE {0} = {1}".format('user_id', self.user_id)
+        query = "DELETE FROM user WHERE {0} = {1}".format('user_id', self.user_id.data)
 
         db.execute(query)

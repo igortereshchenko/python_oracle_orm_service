@@ -1,35 +1,35 @@
 from flask import Flask, render_template, request
-from forms.user import UserForm
+from forms.userAUTO import userForm
 
 from dao.userhelper import *
 app = Flask(__name__)
 app.secret_key = 'development key'
 
 
+
+
 @app.route('/', methods=['GET', 'POST'])
 def user():
-    form = UserForm()
-
+    form = userForm()
     helper = UserHelper()
-    allUsers = helper.getUsers()
 
     if request.method == 'POST':
         if form.validate() == False:
-            return render_template('user.html', form=form, users = allUsers)
+            return render_template('userAUTO.html', form=form)
         else:
             user_id , status = helper.newUser(
-                                            USER_STUDYBOOK=request.form["studybook"],
-                                            USER_BIRTHDAY=request.form["birthday"],
-                                            USER_EMAIL=request.form["email"],
-                                            USER_NAME=request.form["name"],
-                                            USER_PASSWORD=request.form["password"],
-                                            USER_YEAR=request.form["study_year"]
+                                            USER_STUDYBOOK=form.user_studybook.data,
+                                            USER_BIRTHDAY=form.user_birthday.data.strftime("%d-%b-%y"),
+                                            USER_EMAIL=form.user_email.data,
+                                            USER_NAME=form.user_name.data,
+                                            USER_PASSWORD=form.user_password.data,
+                                            USER_YEAR=form.user_year.data.strftime("%d-%b-%y")
                                        )
 
             return "Status {} ID {}".format(status,user_id)
 
 
-    return render_template('user_include.html', form=form, users = allUsers)
+    return render_template('userAUTO.html', form=form, action='')
 
 
 if __name__ == '__main__':

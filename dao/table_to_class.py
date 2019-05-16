@@ -16,8 +16,8 @@ FROM
     INNER JOIN sys.all_tables t 
     ON col.owner = t.owner AND col.table_name = t.table_name
 WHERE
-    col.owner = '{}'
-    AND col.table_name = '{}'
+    col.owner = upper('{0}')
+    AND col.table_name = '{1}'
 """.format(table_owner,table_name)
 
 result = db.execute(query)
@@ -40,19 +40,18 @@ for column_name, data_type, nullable in result.fetchall():
     if nullable=='Y':
         data_required = ""
     else:
-        data_required = ",[validators.DataRequired('Please enter {}.')]".format(column_name.lower())
+        data_required = ",[validators.DataRequired('Please enter {0}.')]".format(column_name.lower())
 
-    class_fields +="    {} = {}('{}: '".format(column_name.lower(), controls_mapping[data_type], column_name.lower()) +data_required+ ")\n"
+    class_fields +="    {0} = {1}('{2}: '".format(column_name.lower(), controls_mapping[data_type], column_name.lower()) +data_required+ ")\n"
 
 
-
-    form_fields += "{{ form.{}.label }} {{ form.{} }} <br/>\n".format(column_name.lower(), column_name.lower())
     form_fields +=\
     """
-    {% for message in form."""+column_name.lower()+""".errors %}
-        <div>{{ message }}</div>
-    {% endfor %}\n
-    """
+    <div class="form-group">
+        {{{{ form.{0}.label }}}} 
+        {{{{ form.{1}(class_="form-control") }}}} 
+    </div>\n""".format(column_name.lower(), column_name.lower())
+
 
 
 
@@ -78,6 +77,7 @@ with open("file_templates/wtf_form", "r") as file:
 with open("file_templates/html_form", "r") as file:
     html_file = file.read()
     html_file = html_file.replace('$FIELDS$',form_fields)
+    html_file = html_file.replace('$FORMNAME$', "Form for {0}".format(table_name))
     file.close()
 
     with open("../templates/{}AUTO.html".format(table_name.lower()), "w") as file:

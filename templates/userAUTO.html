@@ -1,51 +1,74 @@
 
-<form action = "{{action}}/" method = post>
- <fieldset>
 
-    { form.user_password.label } { form.user_password } <br/>
+{% extends "index.html" %}
 
-    {% for message in form.user_password.errors %}
-        <div>{{ message }}</div>
-    {% endfor %}
+{% block content %}
 
-    { form.user_birthday.label } { form.user_birthday } <br/>
+<!--https://www.codeply.com/go/nhbdi2FkJm-->
 
-    {% for message in form.user_birthday.errors %}
-        <div>{{ message }}</div>
-    {% endfor %}
 
-    { form.user_email.label } { form.user_email } <br/>
+<div class="col-md-6 mx-auto">
 
-    {% for message in form.user_email.errors %}
-        <div>{{ message }}</div>
-    {% endfor %}
+    <!-- form card login -->
+    <div class="card rounded-0">
 
-    { form.user_name.label } { form.user_name } <br/>
+        <div class="card-header">
+            <h3 class="mb-0">Form for user</h3>
+        </div>
+        <div class="card-body">
 
-    {% for message in form.user_name.errors %}
-        <div>{{ message }}</div>
-    {% endfor %}
+            <form class="form"  action = "{{action}}" method = post >
+                        {{ form.hidden_tag() }}
 
-    { form.user_year.label } { form.user_year } <br/>
+                                
+    <div class="form-group">
+        {{ form.user_password.label }} 
+        {{ form.user_password(class_="form-control") }} 
+    </div>
 
-    {% for message in form.user_year.errors %}
-        <div>{{ message }}</div>
-    {% endfor %}
+    <div class="form-group">
+        {{ form.user_birthday.label }} 
+        {{ form.user_birthday(class_="form-control") }} 
+    </div>
 
-    { form.user_studybook.label } { form.user_studybook } <br/>
+    <div class="form-group">
+        {{ form.user_email.label }} 
+        {{ form.user_email(class_="form-control") }} 
+    </div>
 
-    {% for message in form.user_studybook.errors %}
-        <div>{{ message }}</div>
-    {% endfor %}
+    <div class="form-group">
+        {{ form.user_name.label }} 
+        {{ form.user_name(class_="form-control") }} 
+    </div>
 
-    { form.user_id.label } { form.user_id } <br/>
+    <div class="form-group">
+        {{ form.user_year.label }} 
+        {{ form.user_year(class_="form-control") }} 
+    </div>
 
-    {% for message in form.user_id.errors %}
-        <div>{{ message }}</div>
-    {% endfor %}
+    <div class="form-group">
+        {{ form.user_studybook.label }} 
+        {{ form.user_studybook(class_="form-control") }} 
+    </div>
 
-    
-    {{ form.submit }}
+    <div class="form-group">
+        {{ form.user_id.label }} 
+        {{ form.user_id(class_="form-control") }} 
+    </div>
 
- </fieldset>
-</form>
+
+                        {{ form.submit(class_="btn btn-success") }}
+            </form>
+        </div>
+        <!--/card-block-->
+    </div>
+    <!-- /form card login -->
+
+</div>
+
+</div>
+
+
+
+
+{% endblock %}
